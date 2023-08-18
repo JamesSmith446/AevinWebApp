@@ -77,23 +77,28 @@ const CreatePost = ({ username, createNewPost }) => {
 
   const submitPost = (e) => {
     e.preventDefault();
-    const date = new Date()
-    let newPost = {};
-    newPost.id = Date.now();
-    newPost.username = username;
-    newPost.description = postText;
-    newPost.comments = [];
-    newPost.votes = 0;
-    newPost.timestamp = date.toDateString() + ", " + date.toLocaleTimeString();
-    newPost.imageUrl = postUrl;
-    newPost.thumbnailUrl = redditAvatar;
+    
+    const date = new Date();
 
-    console.log('new post', newPost)
-    setPostText('')
-    if(newPost.description !== undefined && newPost.description !== '' ){
-      return createNewPost(newPost)
+    const newPost = {
+        id: Date.now(),
+        username: username,
+        description: postText,
+        comments: [],
+        votes: 0,
+        timestamp: `${date.toDateString()}, ${date.toLocaleTimeString()}`,
+        imageUrl: postUrl,
+        thumbnailUrl: redditAvatar
+    };
+
+    console.log('new post', newPost);
+    
+    setPostText('');
+
+    if (newPost.description) {
+        return createNewPost(newPost);
     }
-  }
+};
 
     return (
       <Container>
