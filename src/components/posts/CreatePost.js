@@ -17,6 +17,7 @@ import postUrl from '../../assets/postUrl.jpg';
 import mainActions from '../../redux/main/actions';
 import { connect } from 'react-redux';
 
+
 const useStyles = makeStyles((theme) => ({
   createPostContainer: {
     boxSizing: 'border-box',
@@ -79,6 +80,7 @@ const CreatePost = ({ username, createNewPost }) => {
     e.preventDefault();
     
     const date = new Date();
+      
 
     const newPost = {
         id: Date.now(),
