@@ -98,7 +98,11 @@ const CreateComment = ({createComment, parentId, postId, comment, username, crea
 const mapStateToProps = state => {
   return {
       selectedPost: state.main.selectedPost,
-      username: state.auth.username
+      
+    
+    
+    
+    username: state.auth.username
   }
 }
 
