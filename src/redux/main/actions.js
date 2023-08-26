@@ -24,49 +24,39 @@ const updateVoteCount = (postId, votes) => {
 const setSearched = filteredPosts => 
  ({type: SEARCH_POSTS, payload: filteredPosts })
 
+const getPostsFromState = (state) => state.main.posts;
+
+const findPostById = (postId, posts) => posts.find(post => post.id === postId);
 
 const selectPost = (postId) => async (dispatch, getState) => {
-    const state = getState();
-    const post = await state.main.posts.find((post) => post.id == postId);
-    // console.log('post', post)
-    dispatch({ type: SELECT_POST, payload: post})
+    const posts = getPostsFromState(getState());
+    const post = await findPostById(postId, posts);
+    dispatch({ type: SELECT_POST, payload: post });
+    return dispatch(findPost(post));
+};
 
-    return findPost(post)(dispatch, getState);
-}
-const findPost = (post) => (getState, dispatch) => {
-    return { type: SELECT_POST, payload: post}
-}
+const findPost = (post) => {
+    return { type: SELECT_POST, payload: post };
+};
 
 const createComment = (parentId, comment) => async (dispatch, getState) => {
-    console.log(parentId, comment)
-    let state = getState();
+    const posts = getPostsFromState(getState());
+    const post = await findPostById(parentId, posts);
+    dispatch({ type: ADD_COMMENT, payload: [parentId, comment] });
+};
 
-    const post = await state.main.posts.find((post) => post.id == parentId);
-    dispatch({type: ADD_COMMENT, payload: [parentId, comment]})
-}
-const createSubComment = (postId, parentId, newComment) => async (dispatch, getState) => {
-    // console.log(parentId, newComment)
+const createSubComment = (postId, parentId, newComment) => {
+    dispatch({ type: ADD_SUB_COMMENT, payload: [postId, parentId, newComment] });
+};
 
-    dispatch({type: ADD_SUB_COMMENT, payload: [postId, parentId, newComment]})
-}
-
-const searchPosts = (searchValue)  => (dispatch, getState) => {
-    console.log('search', searchValue)
-    let filteredPosts;
-    let state = getState();
-    filteredPosts = state.main.posts.filter(p => {
-        if(p.username.toLowerCase().includes(searchValue) || p.description.toLowerCase().includes(searchValue)) {
-            return p;
-        } 
-    })
-    console.log(filteredPosts)
+const searchPosts = (searchValue) => (dispatch, getState) => {
+    const posts = getPostsFromState(getState());
+    const filteredPosts = posts.filter(post => post.username.toLowerCase().includes(searchValue) 
+        || post.description.toLowerCase().includes(searchValue));
     dispatch(setSearched(filteredPosts));
+};
 
-}
-
-const createNewPost = (newPost) => {
-    return ({ type: CREATE_POST, payload: newPost})
-}
+const createNewPost = (newPost) => ({ type: CREATE_POST, payload: newPost });
 
 export default {
     fetchData,
